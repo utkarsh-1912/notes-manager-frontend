@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import NoteForm from '../components/NoteForm';
 import api from '../utils/api';
+import BackHome from '../components/BackHome';
+import Loader from '../components/Loader';
 
 const NoteEditPage = () => {
-  const { id } = useParams();  // Get the id from the URL
+  const { id } = useParams(); // Get the note ID from the URL
   const navigate = useNavigate();
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all notes
+  // Fetch all notes and find the one to edit
   const fetchNotes = async () => {
     try {
       const response = await api.get('/notes');
-      // Find the note that matches the ID from the list of notes
-      const foundNote = response.data.find(note => note._id === id);
+      const foundNote = response.data.find((note) => note._id === id);
       if (foundNote) {
         setNote({
           title: foundNote.title,
@@ -34,71 +36,34 @@ const NoteEditPage = () => {
     fetchNotes();
   }, [id]);
 
-  // If the note is still loading or not found
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!note) {
-    return <div>Note not found</div>;
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSave = async (updatedNote) => {
     try {
-      // Submit the edited note (you can replace with an API call)
-      await api.put(`/notes/${id}`, {
-        title: note.title,
-        description: note.description,
-        category: note.category,
-      });
-      navigate('/');  // Redirect to home after saving
+      await api.put(`/notes/${id}`, updatedNote);
+      navigate('/'); // Redirect to the homepage after saving
     } catch (error) {
-      console.error('Error editing note:', error);
+      console.error('Error saving note:', error);
     }
   };
 
+  const handleCancel = () => {
+    navigate('/'); // Redirect to homepage if the user cancels
+  };
+
+  if (loading) {
+    return <div className="text-center mt-10 text-gray-700">Loading...<Loader/></div>;
+  }
+
+  if (!note) {
+    return <div className="text-center mt-10 text-red-500">Note not found</div>;
+  }
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-semibold text-gray-800 mb-4">Edit Note</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="title" className="block text-gray-700 my-2">Title</label>
-          <input
-            type="text"
-            id="title"
-            value={note.title}
-            onChange={(e) => setNote({ ...note, title: e.target.value })}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-gray-700 my-2">Description</label>
-          <textarea
-            id="description"
-            value={note.description}
-            onChange={(e) => setNote({ ...note, description: e.target.value })}
-            required
-            className="w-full min-h-[30vh] px-4 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="category" className="block text-gray-700 my-2">Category</label>
-          <select
-            id="category"
-            value={note.category}
-            onChange={(e) => setNote({ ...note, category: e.target.value })}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-          >
-            <option value="Work">Work</option>
-            <option value="Personal">Personal</option>
-            <option value="Others">Others</option>
-          </select>
-        </div>
-        <button type="submit" className="px-6 py-2 bg-blue-500 text-white rounded-md">Save</button>
-      </form>
+    <div className="w-full sm:max-w-[65vw] mx-auto p-6 bg-white">
+      <BackHome onCancel={handleCancel}/>
+      <div className="mx-3">
+         <h1 className="text-2xl font-semibold text-gray-800 mb-6">Edit Note</h1>
+         <NoteForm note={note} onSave={handleSave} onCancel={handleCancel} />
+      </div>
     </div>
   );
 };

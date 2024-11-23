@@ -2,7 +2,7 @@ import React from 'react';
 
 const SearchBar = ({ searchQuery, setSearchQuery, setCategoryFilter }) => {
   return (
-    <div className="flex items-center space-x-4 w-full">
+    <div className="flex items-center space-x-2 w-full">
       <input
         type="text"
         value={searchQuery}

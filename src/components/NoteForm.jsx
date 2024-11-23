@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
-const NoteForm = ({ note, onSave }) => {
+const NoteForm = ({ note, onSave, onCancel }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Others');
@@ -14,53 +13,75 @@ const NoteForm = ({ note, onSave }) => {
     }
   }, [note]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const newNote = { title, description, category };
-    if (note) {
-      await axios.put(`/api/notes/${note._id}`, newNote);
-    } else {
-      await axios.post('/api/notes', newNote);
-    }
-    onSave();
+    const noteData = { title, description, category };
+    onSave(noteData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium">Title</label>
+        <label htmlFor="title" className="block text-sm font-medium text-gray-800">
+          Title
+        </label>
         <input
+          id="title"
           type="text"
-          required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-700"
+          placeholder="Enter note title"
+          required
         />
       </div>
+
       <div>
-        <label className="block text-sm font-medium">Description</label>
+        <label htmlFor="description" className="block text-sm font-medium text-gray-800">
+          Description
+        </label>
         <textarea
-          required
+          id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded-md"
-        />
+          className="w-full p-2 min-h-[35vh] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-700"
+          rows="5"
+          placeholder="Enter note description"
+          required
+        ></textarea>
       </div>
+
       <div>
-        <label className="block text-sm font-medium">Category</label>
+        <label htmlFor="category" className="block text-sm font-medium text-gray-800">
+          Category
+        </label>
         <select
+          id="category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-700"
         >
           <option value="Work">Work</option>
           <option value="Personal">Personal</option>
           <option value="Others">Others</option>
         </select>
       </div>
-      <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">
-        Save
-      </button>
+
+      <div className="flex flex-col-reverse sm:flex-row justify-end gap-4">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2 w-full sm:w-auto border border-gray-300 text-gray-800 rounded hover:bg-gray-100 focus:outline-none"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 w-full sm:w-auto bg-gray-800 text-white rounded hover:bg-gray-700 focus:outline-none"
+        >
+          Save
+        </button>
+      </div>
     </form>
   );
 };

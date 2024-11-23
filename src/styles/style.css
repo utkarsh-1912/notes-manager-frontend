@@ -1,0 +1,39 @@
+/* src/styles/style.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Buttons */
+.btn-primary {
+  @apply bg-gray-800 text-white px-3 py-2 rounded hover:bg-gray-700 flex items-center;
+}
+
+.btn-secondary {
+  @apply text-gray-800 hover:text-gray-700 border rounded-full p-2;
+}
+
+.btn-danger {
+  @apply text-red-600 hover:text-red-800 border rounded-full p-2;
+}
+
+/* Cards */
+.card {
+  @apply bg-white p-4 rounded shadow hover:shadow-md transition relative;
+}
+
+/* Modals */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50;
+}
+
+.modal-content {
+  @apply bg-white p-4 rounded-lg shadow-xl w-full md:max-w-[80vw] sm:max-h-[80vh];
+}
+
+/* Headers */
+.page-header {
+  @apply text-3xl font-semibold text-gray-800 mb-6 text-center;
+}
+label{
+    @apply m-2;
+}

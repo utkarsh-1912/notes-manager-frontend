@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Utkristi Notes - A Note Manager app",
+  "name": "Utkristi Notes is a notes managing web application build by Utkristi LLC for internal use of employee. External use is prohibited. All rights are reserved by Utkristi LLC.",
   "icons": [
     {
       "src": "favicon.ico",
