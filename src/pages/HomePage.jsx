@@ -13,15 +13,17 @@ const HomePage = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
+  const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Fetch notes from the API based on searchQuery and categoryFilter
   const fetchNotes = useCallback(async () => {
     try {
-      <Loader/>
+      setLoading(true);
       const response = await api.get('/notes', {
         params: { search: searchQuery, category: categoryFilter },
       });
+      setLoading(false);
       setNotes(response.data);
     } catch (error) {
       console.error('Error fetching notes:', error);
@@ -70,7 +72,7 @@ const HomePage = () => {
         setCategoryFilter={setCategoryFilter} 
     />
 
-      {/* Passing props to NoteList */}
+      {loading && <Loader/>}
       <NoteList 
         notes={notes} 
         onNoteClick={openModal} 

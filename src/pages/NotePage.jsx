@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import BackHome from '../components/BackHome';
 import NoteView from '../components/NoteView';  // Import NoteView component
+import Loader from '../components/Loader';
 
 const NotePage = () => {
   const { id } = useParams(); // Get the note ID from the URL
@@ -54,7 +55,7 @@ const NotePage = () => {
   };
 
   if (loading) {
-    return <div className="text-center mt-10 text-gray-700">Loading...</div>;
+    return <div className="text-center mt-10 text-gray-700">Loading...<Loader/></div>;
   }
 
   if (!note) {
